@@ -1,0 +1,107 @@
+{
+  "project_info": {
+    "project_number": "202875628673",
+    "firebase_url": "https://gpsdatabase-3a259.firebaseio.com",
+    "project_id": "gpsdatabase-3a259",
+    "storage_bucket": "gpsdatabase-3a259.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202875628673:android:0e2742c22c61fdb6",
+        "android_client_info": {
+          "package_name": "com.example.kevin.mapproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "202875628673-p26upgmtvmbskilqbcvre4rtfun322mt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kevin.mapproject",
+            "certificate_hash": "02619e688dea4ee0c18c217166dd0ecbc09e374c"
+          }
+        },
+        {
+          "client_id": "202875628673-52lk1rv24t2kg14on93v6i5sq605n6vg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kevin.mapproject",
+            "certificate_hash": "7e81376b63939647b57afa3359632a23038b5265"
+          }
+        },
+        {
+          "client_id": "202875628673-np8auph6km6ai1n5p69drec1tb7ig9rq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARgCTVEpVXoGuBdN7F5TY2-9uBEE5nLgI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "202875628673-np8auph6km6ai1n5p69drec1tb7ig9rq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202875628673:android:850c239592d6ce44",
+        "android_client_info": {
+          "package_name": "com.example.paco.notthefrankenstein"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "202875628673-2uuuk4qcfsl2latoo76fursnn0e5ufpr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.paco.notthefrankenstein",
+            "certificate_hash": "77d91ddf97b7923073991c5bff15aab65be0d265"
+          }
+        },
+        {
+          "client_id": "202875628673-np8auph6km6ai1n5p69drec1tb7ig9rq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARgCTVEpVXoGuBdN7F5TY2-9uBEE5nLgI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "202875628673-np8auph6km6ai1n5p69drec1tb7ig9rq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
