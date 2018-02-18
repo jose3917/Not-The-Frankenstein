@@ -1,6 +1,7 @@
 package com.example.paco.notthefrankenstein;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,4 +23,5 @@ public class FriendsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_friends, container, false);
     }
 
+    
 }
