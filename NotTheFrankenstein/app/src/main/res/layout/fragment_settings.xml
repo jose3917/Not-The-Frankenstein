@@ -5,6 +5,7 @@
     tools:context="com.example.paco.notthefrankenstein.SettingsFragment">
 
 
+
     <TextView
         android:id="@+id/settings_text"
         android:layout_width="wrap_content"

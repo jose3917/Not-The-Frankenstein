@@ -47,26 +47,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final RelativeLayout mRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_home, container, false);
-        //SIGN OUT BUTTON BINDING AND LAUNCH BACK Login.class
-        Button signOut = (Button) mRelativeLayout.findViewById(R.id.sign_out);
-        signOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //DISCONNECTS USER
-                isLoggedOut = true;
-                //disconnectUser();
-                FirebaseAuth.getInstance().signOut();
-
-                //LAUNCHES BACK TO LOG IN SCREEN
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-
-            }
-        });
         mMapView = (MapView) mRelativeLayout.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
-
         mMapView.onResume(); // needed to get the map to display immediately
 
         try {
