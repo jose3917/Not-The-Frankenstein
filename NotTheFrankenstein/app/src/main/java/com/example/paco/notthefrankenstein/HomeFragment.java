@@ -141,6 +141,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
 
     @Override
     public void onLocationChanged(Location location){
+        // TextView locationTv = (TextView) findViewById(R.id.latlongLocation);
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        LatLng latLng = new LatLng(latitude, longitude);
+        // googleMap.addMarker(new MarkerOptions().position(latLng));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+        // locationTv.setText("Latitude:" + latitude + ", Longitude:" + longitude);
 
     }
 
