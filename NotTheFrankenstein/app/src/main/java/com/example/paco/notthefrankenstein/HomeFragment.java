@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -29,6 +31,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener{
     MapView mMapView;
@@ -37,6 +41,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     Location mLastLocation;
+
+    boolean once = true;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -61,18 +68,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
-                //************************* SYDNEY MARKER CODE SNIPPET ************************************
-                // For showing a move to my location button
-                //googleMap.setMyLocationEnabled(true);
-
-                // For dropping a marker at a point on the Map
-                /*LatLng sydney = new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Where's Martin?").snippet("Not Here"));
-
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
-                //************************* SYDNEY MARKER CODE SNIPPET ************************************
 
                 if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
@@ -80,10 +75,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
 
                 buildGoogleApiClient();
                 googleMap.setMyLocationEnabled(true);
-                //CameraPosition cameraPosition = new CameraPosition().Builder().target(m)
-                //Need to have camera update to person immediately when app opens
+
             }
         });
+
         return mRelativeLayout;
     }
 
@@ -106,18 +101,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
-                //************************* SYDNEY MARKER CODE SNIPPET ************************************
-                // For showing a move to my location button
-                //googleMap.setMyLocationEnabled(true);
-
-                // For dropping a marker at a point on the Map
-                /*LatLng sydney = new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Where's Martin?").snippet("Not Here"));
-
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
-                //************************* SYDNEY MARKER CODE SNIPPET ************************************
 
                 if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
@@ -125,8 +108,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
 
                 buildGoogleApiClient();
                 googleMap.setMyLocationEnabled(true);
-                //CameraPosition cameraPosition = new CameraPosition().Builder().target(m)
-                //Need to have camera update to person immediately when app opens
+
             }
         });
         return mRelativeLayout;
@@ -187,12 +169,32 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     @Override
     public void onLocationChanged(Location location){
 
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-        LatLng latLng = new LatLng(latitude, longitude);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+        mLastLocation = location;
 
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        GeoFire geoFire = new GeoFire(ref);
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        geoFire.setLocation(userID, new GeoLocation(location.getLatitude(), location.getLongitude()));
+
+        if(once){
+
+            centerMap(location);
+
+        }
+
+
+    }
+
+    public void centerMap(Location location){
+
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            LatLng latLng = new LatLng(latitude, longitude);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+
+
+            once = false;
     }
 
     protected synchronized void buildGoogleApiClient(){
