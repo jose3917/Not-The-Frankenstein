@@ -40,11 +40,12 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     //In case user decides not to make account
     //for whatever reason
-    Intent cancelIntent = new Intent(this, LoginActivity.class);
+
 
     //FireBase stuff
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     private final String TAG = "FB_SIGNIN";
 
@@ -55,6 +56,10 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        cancel = (Button) findViewById(R.id.btnCancel);
+        create = (Button) findViewById(R.id.btnCreate2);
+
+        final Intent cancelIntent = new Intent(this, LoginActivity.class);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { //Call intent
@@ -73,12 +78,37 @@ public class CreateAccountActivity extends AppCompatActivity {
             }
         });
 
+        //SETS THE INTENT TO LAUNCH TO
+        final Intent intent;
+        intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        //CONNECTS CURRENT USER AND LAUNCHES NEW INTENT
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                if(user != null){
+
+                    Log.d(TAG, "Signed in: " + user.getUid());
+                    startActivity(intent);
+                    finish();
+
+                }else{
+
+                    Log.d(TAG, "Currenty signed out");
+
+                }
+
+            }
+        };
+
     }
 
     public void createAccount(){
         if(!checkFormFields()) return;
-
-
 
         //CHECKS IF USER WAS SUCCESSFULLY CREATED
         mAuth.createUserWithEmailAndPassword(email,password)
@@ -101,6 +131,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                                             .show();
 
                                 }
+                                updateStatus();
 
                             }
                         })
