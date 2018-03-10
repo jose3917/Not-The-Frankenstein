@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static String LOG_TAG = LoginActivity.class.getSimpleName();
     private final String TAG = "FB_SIGNIN";
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListner;
+    private FirebaseAuth.AuthStateListener mAuthListener;
     private EditText etPass;
     private EditText etEmail;
 
@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         //CONNECTS CURRENT USER AND LAUNCHES NEW INTENT
-        mAuthListner = new FirebaseAuth.AuthStateListener() {
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onStart(){
 
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListner);
+        mAuth.addAuthStateListener(mAuthListener);
 
     }
 
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onStop(){
 
         super.onStop();
-        mAuth.removeAuthStateListener(mAuthListner);
+        mAuth.removeAuthStateListener(mAuthListener);
 
     }
 
