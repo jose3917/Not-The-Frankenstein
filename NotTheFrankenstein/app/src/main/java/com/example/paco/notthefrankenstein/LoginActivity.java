@@ -17,10 +17,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -40,7 +37,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         //BINDS XML BUTTON TO ON CLICKLISTENER
         findViewById(R.id.btnCreate).setOnClickListener(this);
-        findViewById(R.id.btnSignIn).setOnClickListener(this);
+        findViewById(R.id.btnCancel).setOnClickListener(this);
 
         //BINDS XML EDITTEXTS TO JAVA EDITTEXTS
         etEmail = (EditText)findViewById(R.id.etEmailAddr);
@@ -97,7 +94,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnSignIn:
+            case R.id.btnCancel:
                 signUserIn();
                 break;
 
@@ -169,54 +166,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //create user
     private void createUserAccount(){
 
-        if(!checkFormFields()){
-
-            return;
-
-        }
-
-        String email = etEmail.getText().toString();
-        String password = etPass.getText().toString();
-
-        //CHECKS IF USER WAS SUCCESSFULLY CREATED
-        mAuth.createUserWithEmailAndPassword(email,password)
-                .addOnCompleteListener(this,
-                        new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-
-                                if(task.isSuccessful()){
-
-                                    Toast.makeText(LoginActivity.this,"com.example.kevin.mapproject.User created", Toast.LENGTH_SHORT)
-                                            .show();
-
-                                    String user_id = mAuth.getCurrentUser().getUid();
-                                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
-                                    current_user_db.setValue(true);
-
-                                }else{
-
-                                    Toast.makeText(LoginActivity.this,"Account creation failed :(", Toast.LENGTH_SHORT)
-                                            .show();
-
-                                }
-
-                            }
-                        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                        Log.e(TAG, e.toString());
-                        if (e instanceof FirebaseAuthUserCollisionException) {
-                            updateStatus("This email address is already in use.");
-                        }
-                        else {
-                            updateStatus(e.getLocalizedMessage());
-                        }
-
-                    }
-                });
+        Intent intent = new Intent(this, CreateAccountActivity.class);
+        startActivity(intent);
+        finish();
 
     }
 
@@ -264,5 +216,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         startActivity(intent);
 
     }
+
+
 
 }

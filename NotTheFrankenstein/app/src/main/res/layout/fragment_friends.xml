@@ -4,12 +4,8 @@
     android:layout_height="match_parent"
     tools:context="com.example.paco.notthefrankenstein.FriendsFragment">
 
-
-    <TextView
-        android:id="@+id/friends_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Friends Fragment" />
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.design.widget.AppBarLayout>
 </RelativeLayout>
