@@ -5,12 +5,21 @@
     tools:context="com.example.paco.notthefrankenstein.SettingsFragment">
 
 
+    <ListView
+        android:id="@+id/settingsListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="61dp" />
 
-    <TextView
-        android:id="@+id/settings_text"
+    <Switch
+        android:id="@+id/switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Settings Fragment" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Incognito"
+        android:textSize="30sp" />
 </RelativeLayout>
