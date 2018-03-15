@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private final String TAG = "FB_SIGNIN";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListner;
+
     private EditText etPass;
     private EditText etEmail;
 
@@ -37,7 +38,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         //BINDS XML BUTTON TO ON CLICKLISTENER
         findViewById(R.id.btnCreate).setOnClickListener(this);
-        findViewById(R.id.btnCancel).setOnClickListener(this);
+        findViewById(R.id.btnSignIn).setOnClickListener(this);
 
         //BINDS XML EDITTEXTS TO JAVA EDITTEXTS
         etEmail = (EditText)findViewById(R.id.etEmailAddr);
@@ -66,7 +67,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 }else{
 
-                    Log.d(TAG, "Currenty signed out");
+                    Log.d(TAG, "Currently signed out");
 
                 }
 
@@ -94,7 +95,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnCancel:
+            case R.id.btnSignIn:
                 signUserIn();
                 break;
 
@@ -207,16 +208,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         TextView tvStat = (TextView)findViewById(R.id.tvSignInStatus);
         tvStat.setText(stat);
     }
-
-    public void launchNewMainActivity(View view){
-
-        Log.d(LOG_TAG, "Button Clicked!");
-
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-
-    }
-
-
 
 }

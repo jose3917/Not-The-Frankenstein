@@ -1,7 +1,6 @@
 package com.example.paco.notthefrankenstein;
 
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,30 +22,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class CreateAccountActivity extends AppCompatActivity {
-
     //only two buttons
     private Button cancel;
     private Button create;
-
-    //Strings
-    String username;
-    String email;
-    String password;
 
     //Edit text fields
     private EditText edit_display;
     private EditText edit_email;
     private EditText edit_password;
 
-    //In case user decides not to make account
-    //for whatever reason
-
-
     //FireBase stuff
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+    private static String LOG_TAG = CreateAccountActivity.class.getSimpleName();
     private final String TAG = "FB_SIGNIN";
 
     @Override
@@ -58,6 +48,11 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         cancel = (Button) findViewById(R.id.btnCancel);
         create = (Button) findViewById(R.id.btnCreate2);
+
+        //BINDS XML EDITTEXTS TO JAVA EDITTEXTS
+        edit_display = (EditText)findViewById(R.id.editDisplayName);
+        edit_email = (EditText) findViewById(R.id.editEmail);
+        edit_password = (EditText) findViewById(R.id.editPassword);
 
         final Intent cancelIntent = new Intent(this, LoginActivity.class);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -71,9 +66,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                username = edit_display.getText().toString();
-                email = edit_email.getText().toString();
-                password = edit_password.getText().toString();
                 createAccount();
             }
         });
@@ -98,7 +90,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                 }else{
 
-                    Log.d(TAG, "Currenty signed out");
+                    Log.d(TAG, "Currently signed out");
 
                 }
 
@@ -109,6 +101,11 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     public void createAccount(){
         if(!checkFormFields()) return;
+
+        String displayName = edit_display.getText().toString();
+        String email = edit_email.getText().toString();
+        String password = edit_password.getText().toString();
+
 
         //CHECKS IF USER WAS SUCCESSFULLY CREATED
         mAuth.createUserWithEmailAndPassword(email,password)
@@ -123,7 +120,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                                             .show();
 
                                     String userId = mAuth.getCurrentUser().getUid();
-                                    writeNewUser(userId, username, email);
+                                    writeNewUser(userId, displayName, email);
 
                                 }else{
 
@@ -153,14 +150,13 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private boolean checkFormFields() {
-        String displayName, email, password;
-
-        displayName = edit_display.getText().toString();
-        email = edit_email.getText().toString();
-        password = edit_password.getText().toString();
+        String displayName = edit_display.getText().toString();
+        String email = edit_email.getText().toString();
+        String password = edit_password.getText().toString();
 
         if(displayName.isEmpty()){
             edit_display.setError("Display name required");
+            return false;
         }
         if (email.isEmpty()) {
             edit_email.setError("Email Required");
@@ -186,12 +182,12 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private void updateStatus(String stat) {
-        TextView tvStat = (TextView)findViewById(R.id.tvSignInStatus);
+        TextView tvStat = (TextView) findViewById(R.id.tvSignInStatus);
         tvStat.setText(stat);
     }
 
-    private void writeNewUser(String userId, String name, String email) {
-        User user = new User(name, email);
+    private void writeNewUser(String userId, String username, String email) {
+        User user = new User(username, email, userId);
 
         mDatabase.child("users").child(userId).setValue(user);
     }

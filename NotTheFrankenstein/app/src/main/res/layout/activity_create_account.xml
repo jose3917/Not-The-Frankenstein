@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="Your Display Name:"
+        android:text="Your User Name:"
         android:textAppearance="@android:style/TextAppearance.Material.Large" />
 
     <EditText
