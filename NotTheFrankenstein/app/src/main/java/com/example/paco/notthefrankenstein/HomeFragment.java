@@ -34,7 +34,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class HomeFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener{
+public class HomeFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener,
+FriendsFragment.OnFriendItemSelectedListener {
     MapView mMapView;
     private GoogleMap googleMap;
     private boolean isLoggedOut = false;
@@ -204,5 +205,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                 .addApi(LocationServices.API)
                 .build();
         mGoogleApiClient.connect();
+    }
+
+    //Method from interface in FriendFragment
+    @Override
+    public void onFriendItemSelected(int position){
+
     }
 }
