@@ -20,6 +20,10 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
+    private final Fragment home = new HomeFragment();
+    private final Fragment friend = new FriendsFragment();
+    private final Fragment settings = new SettingsFragment();
+
     //Navbar activity
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -32,13 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    transaction.replace(R.id.fragment_container, new HomeFragment()).commit();
+                    transaction.replace(R.id.fragment_container, home).commit();
                     return true;
                 case R.id.navigation_dashboard:
-                    transaction.replace(R.id.fragment_container, new FriendsFragment()).commit();
+                    transaction.replace(R.id.fragment_container, friend).commit();
                     return true;
                 case R.id.navigation_notifications:
-                    transaction.replace(R.id.fragment_container, new SettingsFragment()).commit();
+                    transaction.replace(R.id.fragment_container, settings).commit();
                     return true;
             }
             return false;
@@ -55,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_container, new HomeFragment()).commit();
+        transaction.replace(R.id.fragment_container, home).commit();
 
     }
 
