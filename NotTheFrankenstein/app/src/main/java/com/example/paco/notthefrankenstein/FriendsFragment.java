@@ -57,5 +57,9 @@ public class FriendsFragment extends Fragment {
 
     }
 
+    public interface OnFriendItemSelectedListener{
+        public void onFriendItemSelected(int position);
+    }
+
     
 }
