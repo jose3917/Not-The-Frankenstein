@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private final Fragment home = new HomeFragment();
     private final Fragment friend = new FriendsFragment();
     private final Fragment settings = new SettingsFragment();
+    private Fragment active = home;
 
     //Navbar activity
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+
 
             switch (item.getItemId()) {
                 case R.id.navigation_home:
@@ -55,11 +58,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        //addHomeFragment();
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_container, home).commit();
+        
+        final FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction().add(R.id.fragment_container, settings, "3").commit();
+        fm.beginTransaction().add(R.id.fragment_container, friend, "2").commit();
+        fm.beginTransaction().add(R.id.fragment_container, home, "1").commit();
 
     }
 
