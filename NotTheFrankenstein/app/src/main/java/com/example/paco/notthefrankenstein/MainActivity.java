@@ -82,6 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
         if(item.getItemId() == R.id.log_out_menu_item){
 
+            final FragmentManager fm = getSupportFragmentManager();
+
+            fm.beginTransaction().remove(home).commit();
+            fm.beginTransaction().remove(friend).commit();
+            fm.beginTransaction().remove(settings).commit();
+
             //disconnectUser();
             FirebaseAuth.getInstance().signOut();
 
@@ -89,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
+
+
+
 
         }
 
