@@ -42,6 +42,7 @@ FriendsFragment.OnFriendItemSelectedListener {
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     Location mLastLocation;
+    DatabaseReference mDatabase;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -55,6 +56,7 @@ FriendsFragment.OnFriendItemSelectedListener {
         mMapView = (MapView) mRelativeLayout.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
@@ -185,10 +187,11 @@ FriendsFragment.OnFriendItemSelectedListener {
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(18));
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        GeoFire geoFire = new GeoFire(ref);
+        String l = "Location";
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        geoFire.setLocation(userID, new GeoLocation(location.getLatitude(), location.getLongitude()));
+        DatabaseReference ref = mDatabase.child("users").child(userID);
+        GeoFire geoFire = new GeoFire(ref);
+        geoFire.setLocation(l, new GeoLocation(location.getLatitude(), location.getLongitude()));
 
 
     }
