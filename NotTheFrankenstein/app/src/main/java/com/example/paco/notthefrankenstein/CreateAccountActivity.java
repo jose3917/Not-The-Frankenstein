@@ -46,6 +46,8 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        mAuth = FirebaseAuth.getInstance();
+
         cancel = (Button) findViewById(R.id.btnCancel);
         create = (Button) findViewById(R.id.btnCreate2);
 
@@ -100,15 +102,16 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     public void createAccount(){
-        if(!checkFormFields()) return;
+        if(!checkFormFields())
+            return;
 
-        String displayName = edit_display.getText().toString();
-        String email = edit_email.getText().toString();
-        String password = edit_password.getText().toString();
+        final String final_displayName = edit_display.getText().toString();
+        final String final_email = edit_email.getText().toString();
+        final String final_password = edit_password.getText().toString();
 
 
         //CHECKS IF USER WAS SUCCESSFULLY CREATED
-        mAuth.createUserWithEmailAndPassword(email,password)
+        mAuth.createUserWithEmailAndPassword(final_email, final_password)
                 .addOnCompleteListener(this,
                         new OnCompleteListener<AuthResult>() {
                             @Override
@@ -120,7 +123,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                                             .show();
 
                                     String userId = mAuth.getCurrentUser().getUid();
-                                    writeNewUser(userId, displayName, email);
+                                    writeNewUser(userId, final_displayName, final_email);
 
                                 }else{
 
@@ -146,6 +149,22 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                     }
                 });
+
+    }
+
+    @Override
+    public void onStart(){
+
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+
+    }
+
+    @Override
+    public void onStop(){
+
+        super.onStop();
+        mAuth.removeAuthStateListener(mAuthListener);
 
     }
 
