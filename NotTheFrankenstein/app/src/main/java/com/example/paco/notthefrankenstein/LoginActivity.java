@@ -24,12 +24,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static String LOG_TAG = LoginActivity.class.getSimpleName();
     private final String TAG = "FB_SIGNIN";
     private FirebaseAuth mAuth;
-<<<<<<< HEAD
     private FirebaseAuth.AuthStateListener mAuthListener;
-=======
-    private FirebaseAuth.AuthStateListener mAuthListner;
 
->>>>>>> DisplayNameBranch
     private EditText etPass;
     private EditText etEmail;
 
