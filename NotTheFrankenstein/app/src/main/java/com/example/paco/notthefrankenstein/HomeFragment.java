@@ -42,9 +42,6 @@ FriendsFragment.OnFriendItemSelectedListener {
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     Location mLastLocation;
-
-    boolean once = true;
-
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -79,7 +76,6 @@ FriendsFragment.OnFriendItemSelectedListener {
 
             }
         });
-
         return mRelativeLayout;
     }
 
@@ -102,6 +98,18 @@ FriendsFragment.OnFriendItemSelectedListener {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
+                //************************* SYDNEY MARKER CODE SNIPPET ************************************
+                // For showing a move to my location button
+                //googleMap.setMyLocationEnabled(true);
+
+                // For dropping a marker at a point on the Map
+                /*LatLng sydney = new LatLng(-34, 151);
+                googleMap.addMarker(new MarkerOptions().position(sydney).title("Where's Martin?").snippet("Not Here"));
+
+                // For zooming automatically to the location of the marker
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
+                //************************* SYDNEY MARKER CODE SNIPPET ************************************
 
                 if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
@@ -109,7 +117,8 @@ FriendsFragment.OnFriendItemSelectedListener {
 
                 buildGoogleApiClient();
                 googleMap.setMyLocationEnabled(true);
-
+                //CameraPosition cameraPosition = new CameraPosition().Builder().target(m)
+                //Need to have camera update to person immediately when app opens
             }
         });
         return mRelativeLayout;
@@ -170,32 +179,18 @@ FriendsFragment.OnFriendItemSelectedListener {
     @Override
     public void onLocationChanged(Location location){
 
-        mLastLocation = location;
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        LatLng latLng = new LatLng(latitude, longitude);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(18));
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         GeoFire geoFire = new GeoFire(ref);
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         geoFire.setLocation(userID, new GeoLocation(location.getLatitude(), location.getLongitude()));
 
-        if(once){
 
-            centerMap(location);
-
-        }
-
-
-    }
-
-    public void centerMap(Location location){
-
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-            LatLng latLng = new LatLng(latitude, longitude);
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            googleMap.animateCamera(CameraUpdateFactory.zoomTo(18));
-
-
-            once = false;
     }
 
     protected synchronized void buildGoogleApiClient(){

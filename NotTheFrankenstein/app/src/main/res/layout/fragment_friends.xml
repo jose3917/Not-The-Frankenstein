@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.paco.notthefrankenstein.FriendsFragment">
 
+<<<<<<< HEAD
 
     <EditText
         android:id="@+id/searchUserPlainText"
@@ -33,4 +34,10 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/searchUserPlainText"
         android:layout_alignParentStart="true" />
+=======
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.design.widget.AppBarLayout>
+>>>>>>> DisplayNameBranch
 </RelativeLayout>

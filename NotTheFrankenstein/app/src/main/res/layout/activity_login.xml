@@ -49,29 +49,29 @@
         android:layout_alignParentStart="true" />
 
     <Button
+        android:id="@+id/btnSignIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign In"
-        android:id="@+id/btnSignIn"
-        android:layout_below="@+id/etPassword"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/etPassword"
         android:layout_marginTop="25dp"
-        />
+        android:text="Sign In" />
 
     <Button
+        android:id="@+id/btnCreate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create Account"
-        android:id="@+id/btnCreate"
+        android:layout_alignBaseline="@+id/btnSignIn"
         android:layout_alignBottom="@+id/btnSignIn"
-        android:layout_toEndOf="@+id/textView2" />
+        android:layout_toEndOf="@+id/textView2"
+        android:text="Create Account" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/tvSignInStatus"
-        android:layout_below="@+id/btnSignIn"
+        android:layout_below="@+id/btnCancel"
         android:layout_alignParentStart="true"
         android:layout_marginTop="15dp" />
 
