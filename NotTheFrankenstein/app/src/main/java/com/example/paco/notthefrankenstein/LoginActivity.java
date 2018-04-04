@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         //SETS THE INTENT TO LAUNCH TO
         final Intent intent;
-        intent = new Intent(this, MainActivity.class);
+        intent = new Intent(this, HomeMapsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         //CONNECTS CURRENT USER AND LAUNCHES NEW INTENT
