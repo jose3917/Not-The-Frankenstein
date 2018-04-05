@@ -81,50 +81,6 @@ FriendsFragment.OnFriendItemSelectedListener {
         return mRelativeLayout;
     }
 
-    
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState, String friendUID) {
-        // Inflate the layout for this fragment
-        final RelativeLayout mRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_home, container, false);
-        mMapView = (MapView) mRelativeLayout.findViewById(R.id.mapView);
-        mMapView.onCreate(savedInstanceState);
-        mMapView.onResume(); // needed to get the map to display immediately
-
-        try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
-                //************************* SYDNEY MARKER CODE SNIPPET ************************************
-                // For showing a move to my location button
-                //googleMap.setMyLocationEnabled(true);
-
-                // For dropping a marker at a point on the Map
-                /*LatLng sydney = new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Where's Martin?").snippet("Not Here"));
-
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
-                //************************* SYDNEY MARKER CODE SNIPPET ************************************
-
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-
-                buildGoogleApiClient();
-                googleMap.setMyLocationEnabled(true);
-                //CameraPosition cameraPosition = new CameraPosition().Builder().target(m)
-                //Need to have camera update to person immediately when app opens
-            }
-        });
-        return mRelativeLayout;
-    }
 
     @Override
     public void onResume() {

@@ -67,12 +67,12 @@
         android:text="Create Account" />
 
     <TextView
+        android:id="@+id/tvSignInStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/tvSignInStatus"
-        android:layout_below="@+id/btnCancel"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="15dp" />
+        android:layout_below="@+id/btnSignIn"
+        android:layout_marginTop="16dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
