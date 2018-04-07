@@ -74,7 +74,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         //SETS THE INTENT TO LAUNCH TO
         final Intent intent;
-        intent = new Intent(this, MainActivity.class);
+        intent = new Intent(this, MapsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         //CONNECTS CURRENT USER AND LAUNCHES NEW INTENT
