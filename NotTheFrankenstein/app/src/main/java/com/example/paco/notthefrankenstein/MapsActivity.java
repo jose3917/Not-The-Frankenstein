@@ -31,7 +31,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        
+
 
     }
 
@@ -70,8 +70,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }else if(item.getItemId() == R.id.menu_settings){
 
+            Intent intent = new Intent(MapsActivity.this, SettingsActivity.class);
+            startActivity(intent);
 
-   
+        }else if(item.getItemId() == R.id.menu_user_profile){
+
+            Intent intent = new Intent(MapsActivity.this, UserProfileActivity.class);
+            startActivity(intent);
 
         }
 
