@@ -22,7 +22,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private Button settingsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,18 +31,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
-        settingsBtn = (Button) findViewById(R.id.settingsBtn);
-        settingsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MapsActivity.this, SettingsActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
+        
 
     }
 
