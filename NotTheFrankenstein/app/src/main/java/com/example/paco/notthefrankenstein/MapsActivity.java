@@ -80,6 +80,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             startActivity(intent);
             finish();
 
+        }else if(item.getItemId() == R.id.menu_settings){
+
+
+            Intent intent = new Intent(MapsActivity.this, SettingsActivity.class);
+            startActivity(intent);
+
+
         }
 
         return true;
