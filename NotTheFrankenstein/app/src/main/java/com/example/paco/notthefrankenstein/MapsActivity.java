@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,12 +68,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent i = getIntent();
         UID = i.getStringExtra("UID");
 
+        /*
         //Intent testing;
         Context con = getApplicationContext();
         CharSequence text = UID;
         int duration = Toast.LENGTH_LONG;
         Toast t = Toast.makeText(con,text,duration);
         t.show();
+        */
+
+        //SAVING PREFERENCES
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
     }
 

@@ -15,25 +15,8 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
     }
 
-    public void FindFriendButtonOnClick(View view) {
-
-        Button findButton = (Button) findViewById(R.id.find_button);
-        final EditText txt = (EditText) findViewById(R.id.editText);
-        final String s = String.valueOf(txt.getText());
-
-        findButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(UserProfileActivity.this, MapsActivity.class);
-                intent.putExtra("UID", s.toString());
-                startActivity(intent);
-                finish();
 
 
-            }
-        });
 
 
-    }
 }
