@@ -97,9 +97,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location) {
 
-        DatabaseReference ref = mDatabase.child("users").child(mAuth.getUid());
+        DatabaseReference ref = mDatabase.child("Locations");
         GeoFire geoFire = new GeoFire(ref);
-        geoFire.setLocation("Location", new GeoLocation(location.getLatitude(), location.getLongitude()));
+        geoFire.setLocation(mAuth.getUid(), new GeoLocation(location.getLatitude(), location.getLongitude()));
 
     }
 
