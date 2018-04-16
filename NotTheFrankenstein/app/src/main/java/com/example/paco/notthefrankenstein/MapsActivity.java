@@ -170,12 +170,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if(item.getItemId() == R.id.log_out_menu_item){
             //disconnectUser();
-            FirebaseAuth.getInstance().signOut();
+            mAuth.signOut();
 
             //LAUNCHES BACK TO LOG IN SCREEN
             Intent intent = new Intent(MapsActivity.this, LoginActivity.class);
-            startActivity(intent);
             finish();
+            startActivity(intent);
 
         }else if(item.getItemId() == R.id.menu_settings){
 
@@ -190,6 +190,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         return true;
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
     }
 
 }
