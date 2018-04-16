@@ -17,6 +17,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserProfileActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
@@ -30,6 +33,8 @@ public class UserProfileActivity extends AppCompatActivity {
     final static String UID = "UID";
     final static String EMAIL = "EMAIL";
 
+    HashMap<String, String> users;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +46,9 @@ public class UserProfileActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
         mRef = mDatabase.getReference();
+
+
+        users = new HashMap<>();
 
         findButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,22 +65,30 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 }*/
 
-                //logUsername();
-                getCurrentUsername();
+                getUsersHT();
+                for(Map.Entry<String, String> entry: users.entrySet()){
+                    String username = entry.getKey();
+                    String uid = entry.getValue();
+                    String message = String.format("Username: %s || UID: %s", username, uid);
+                    Log.d(DATA, message);
+                }
+                //getCurrentUsername();
 
             }
         });
 
     }
 
-    public void logUsername(){
-        String current_uid = mAuth.getUid();
-        Query q = mRef.child("users");
+    public void getUsersHT(){
+        Query q = mRef.child("Users");
         q.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                User user = dataSnapshot.getValue(User.class);
-                //Log.d(TAG, "onChildAdded(): "+user.getUid());
+                for(DataSnapshot snap: dataSnapshot.getChildren()){
+                    //Log.d(DATA, "onChildAdded(): "+dataSnapshot.getValue());
+                    User u = dataSnapshot.getValue(User.class);
+                    users.put(u.getUser_name(), u.getUid());
+                }
             }
 
             @Override
@@ -97,7 +113,13 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-    public void getCurrentUsername(){
+    public void sendTableToMaps(){
+
+    }
+
+
+    //Could be used in Settings Activity, not very helpful here
+    public void getCurrentUser(){
         String current_uid = mAuth.getUid();
         Query q = mRef.child("Users").child(current_uid);
         q.addValueEventListener(new ValueEventListener() {
