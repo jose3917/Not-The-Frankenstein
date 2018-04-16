@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +39,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -199,6 +202,51 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
+        //maybe change so that it only disconnects when user logs out
+        //can still change location in other activities if still signed in
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.d("RESUME", "Hello!");
+        Intent intent = getIntent();
+        if(intent.getSerializableExtra("table")!=null){
+            Log.d("RESUME", "Received hash table, boi");
+            if(!intent.getStringExtra("string").isEmpty()){
+                Log.d("RESUME", "Got the string too, it's: "
+                        +intent.getStringExtra("string"));
+            }
+            else{
+                Log.d("RESUME", "Empty string, bitch");
+            }
+        }
+    }
+
+    //necessary for retrieving hash table
+    public HashMap<String, String> receiveTable(){
+        Intent receiveTable = getIntent();
+        return (HashMap<String, String>) receiveTable.getSerializableExtra("table");
+    }
+
+    @Override //maybe not useful********************************************************************
+    public void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        if(intent.getStringExtra("string").equals("string")){
+            //call on method to place marker
+            //Toast.makeText(MapsActivity.this,"Received hash table, boi", Toast.LENGTH_SHORT)
+            //        .show();
+            Log.d("onNewIntent(): ", "Received hash table, boi");
+        }
+    }//Will Delete**********************************************************************************
+
+    public void findPerson(String s){
+
     }
 
 }

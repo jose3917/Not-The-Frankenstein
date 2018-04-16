@@ -54,10 +54,7 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getUsersHT();
-                for(Map.Entry<String, String> entry: users.entrySet()){
-                    String message = String.format("Username: %s || UID: %s", entry.getKey(), entry.getValue());
-                    Log.d(DATA, message);
-                }
+                sendTableToMaps();
             }
         });
 
@@ -97,7 +94,11 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     public void sendTableToMaps(){
-
+        Intent sendTable = new Intent(UserProfileActivity.this, MapsActivity.class);
+        sendTable.putExtra("table", users);
+        String field = txt.getText().toString();
+        sendTable.putExtra("string", field);
+        startActivity(sendTable);
     }
 
 
