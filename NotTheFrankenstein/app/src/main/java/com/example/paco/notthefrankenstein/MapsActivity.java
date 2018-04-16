@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.LocationCallback;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -62,31 +64,46 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        //Creating a reference to signed-in user
+        //and the database
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        Intent i = getIntent();
-        UID = i.getStringExtra("UID");
-
-        /*
-        //Intent testing;
-        Context con = getApplicationContext();
-        CharSequence text = UID;
-        int duration = Toast.LENGTH_LONG;
-        Toast t = Toast.makeText(con,text,duration);
-        t.show();
-        */
+        //Used to zoom into map on startup
+        //Unsure if this'll work with newly created accounts
+        retrieveLastKnownLocation();
 
         //SAVING PREFERENCES
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
     }
 
+    public void retrieveLastKnownLocation(){
+        DatabaseReference l = mDatabase.child("Locations");
+        GeoFire geoFire = new GeoFire(l);
+        geoFire.getLocation(mAuth.getUid(), new LocationCallback() {
+            @Override
+            public void onLocationResult(String key, GeoLocation location) {
+                if(location!=null){
+                    LatLng lt = new LatLng(location.latitude, location.longitude);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(lt));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
 
@@ -96,7 +113,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onLocationChanged(Location location) {
-
+        mLastLocation = location;
         DatabaseReference ref = mDatabase.child("Locations");
         GeoFire geoFire = new GeoFire(ref);
         geoFire.setLocation(mAuth.getUid(), new GeoLocation(location.getLatitude(), location.getLongitude()));
@@ -174,7 +191,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         return true;
     }
-
-
 
 }

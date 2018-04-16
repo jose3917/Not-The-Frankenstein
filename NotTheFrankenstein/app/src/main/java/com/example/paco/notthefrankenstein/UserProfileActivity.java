@@ -53,27 +53,11 @@ public class UserProfileActivity extends AppCompatActivity {
         findButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Intent intent = new Intent(UserProfileActivity.this, MapsActivity.class);
-                String s = String.valueOf(txt.getText());
-                if(s.isEmpty()){
-                    txt.setError("Please enter something");
-                }
-                else {
-                    intent.putExtra("UID", s);
-                    startActivity(intent);
-                    finish();
-
-                }*/
-
                 getUsersHT();
                 for(Map.Entry<String, String> entry: users.entrySet()){
-                    String username = entry.getKey();
-                    String uid = entry.getValue();
-                    String message = String.format("Username: %s || UID: %s", username, uid);
+                    String message = String.format("Username: %s || UID: %s", entry.getKey(), entry.getValue());
                     Log.d(DATA, message);
                 }
-                //getCurrentUsername();
-
             }
         });
 
@@ -85,7 +69,6 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
-                    //Log.d(DATA, "onChildAdded(): "+dataSnapshot.getValue());
                     User u = dataSnapshot.getValue(User.class);
                     users.put(u.getUser_name(), u.getUid());
                 }
