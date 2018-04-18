@@ -32,7 +32,15 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".UserProfileActivity"></activity>
+        <activity android:name=".UserProfileActivity" />
+        <activity
+            android:name=".SettingsActivity2"
+            android:label="@string/title_activity_settings2"
+            android:parentActivityName=".MapsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.paco.notthefrankenstein.MapsActivity" />
+        </activity>
     </application>
 
 </manifest>

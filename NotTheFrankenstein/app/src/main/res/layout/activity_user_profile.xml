@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/editText"
         android:layout_alignParentEnd="true"
+        android:onClick="FindFriendButtonOnClick"
         android:text="Find"
         tools:layout_editor_absoluteX="265dp"
         tools:layout_editor_absoluteY="446dp" />
