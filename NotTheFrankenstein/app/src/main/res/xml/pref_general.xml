@@ -4,7 +4,8 @@
         android:defaultValue="false"
         android:key="example_switch"
         android:summary="Hide from your friends, like martin."
-        android:title="Incognito Mode" />
+        android:title="Incognito Mode"
+        android:value = "fasle"/>
 
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->

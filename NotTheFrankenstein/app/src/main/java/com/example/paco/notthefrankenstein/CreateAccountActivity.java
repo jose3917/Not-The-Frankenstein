@@ -208,6 +208,6 @@ public class CreateAccountActivity extends AppCompatActivity {
     private void writeNewUser(String userId, String username, String email) {
         User user = new User(username, email, userId);
 
-        mDatabase.child("users").child(userId).setValue(user);
+        mDatabase.child("Users").child(userId).setValue(user);
     }
 }

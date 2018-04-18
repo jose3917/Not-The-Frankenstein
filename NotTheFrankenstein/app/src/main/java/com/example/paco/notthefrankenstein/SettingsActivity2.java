@@ -19,6 +19,7 @@ import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -192,7 +193,24 @@ public class SettingsActivity2 extends AppCompatPreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("example_text"));
 
+
+            //username stuff
+            final Preference pref = getPreferenceManager().findPreference("example_text");
+            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    pref.setSummary(newValue.toString());
+                    UserProfileActivity.setUserName(newValue.toString());
+                    return true;
+                }
+            });
+
+
+
+
         }
+
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {

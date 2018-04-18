@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -43,6 +44,20 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
             }
         });
+
+    }
+
+    public static void setUserName(String s){
+
+        FirebaseAuth nAuth;
+        FirebaseDatabase nDatabase;
+        DatabaseReference nRef;
+
+        nDatabase = FirebaseDatabase.getInstance();
+        nAuth = FirebaseAuth.getInstance();
+        nRef = nDatabase.getReference();
+
+        nRef.child("Users").child(nAuth.getUid()).child("user_name").setValue(s);
 
     }
 

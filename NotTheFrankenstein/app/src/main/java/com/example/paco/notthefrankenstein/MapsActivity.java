@@ -1,7 +1,9 @@
 package com.example.paco.notthefrankenstein;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -9,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +36,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private String UID;
+
+    private boolean incognito;
 
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
@@ -66,7 +71,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         */
 
         //SAVING PREFERENCES
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+
 
     }
 
@@ -85,9 +91,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location) {
 
-        DatabaseReference ref = mDatabase.child("users").child(mAuth.getUid());
-        GeoFire geoFire = new GeoFire(ref);
-        geoFire.setLocation("Location", new GeoLocation(location.getLatitude(), location.getLongitude()));
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        //incognito = sharedPref.getBoolean("example_switch",);
+
+        if(!incognito) {
+            DatabaseReference ref = mDatabase.child("users").child(mAuth.getUid());
+            GeoFire geoFire = new GeoFire(ref);
+            geoFire.setLocation("Location", new GeoLocation(location.getLatitude(), location.getLongitude()));
+        }
 
     }
 
