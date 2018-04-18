@@ -13,20 +13,30 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.LocationCallback;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -46,6 +56,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     FirebaseAuth mAuth;
     DatabaseReference mDatabase;
 
+    //List of users and their uids
+    HashMap<String, String> users;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,22 +71,52 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        Intent i = getIntent();
-        UID = i.getStringExtra("UID");
 
-        /*
-        //Intent testing;
-        Context con = getApplicationContext();
-        CharSequence text = UID;
-        int duration = Toast.LENGTH_LONG;
-        Toast t = Toast.makeText(con,text,duration);
-        t.show();
-        */
+        //Zoom to last known location
+        retrieveLastKnownLocation();
 
-        //SAVING PREFERENCES
+    }
 
+    @Override
+    public void onStop(){
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
+    }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.d("RESUME", "Hello!");
+        Intent intent = getIntent();
+        if(intent.getSerializableExtra("table")!=null){
+            //old updateHashMap((HashMap<String, String>) intent.getSerializableExtra("table"));
+            Serializable data = getIntent().getSerializableExtra("table");
+            Log.d("RESUME", "Received hash table, boi");
+            updateHashMap(receiveTable());
+            if(!intent.getStringExtra("string").isEmpty()){
+                Log.d("RESUME", "Got the string too, it's: "
+                        +intent.getStringExtra("string"));
+                String s = intent.getStringExtra("string");
+                findPerson(s);
+                logHashMap();
+            }
+            else{
+                Log.d("RESUME", "Empty string, bitch");
+                logHashMap();
+            }
+        }
+        else{
+            Log.d("MISSING", "Hashtable not found.");
+        }
+    }
 
+    //necessary for retrieving hash table
+    public HashMap<String, String> receiveTable(){
+        Intent receiveTable = getIntent();
+        return (HashMap<String, String>) receiveTable.getSerializableExtra("table");
     }
 
     @Override
@@ -101,6 +144,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             geoFire.setLocation("Location", new GeoLocation(location.getLatitude(), location.getLongitude()));
         }
 
+        //Update Location
+        mLastLocation = location;
+        DatabaseReference ref = mDatabase.child("Locations");
+        GeoFire geoFire = new GeoFire(ref);
+        geoFire.setLocation(mAuth.getUid(), new GeoLocation(location.getLatitude(), location.getLongitude()));
+
+    }
+
+    public void retrieveLastKnownLocation(){
+        DatabaseReference l = mDatabase.child("Locations");
+        GeoFire geoFire = new GeoFire(l);
+        geoFire.getLocation(mAuth.getUid(), new LocationCallback() {
+            @Override
+            public void onLocationResult(String key, GeoLocation location) {
+                if(location!=null){
+                    LatLng lt = new LatLng(location.latitude, location.longitude);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(lt));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     protected synchronized void buildGoogleApiClient(){
@@ -175,6 +244,56 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
+    public void findPerson(String s){ //Places marker on map
+        if(users.containsKey(s)){ //Case sensitive, uses username(key) to get UID(value)
+            Log.d("SEARCH_SUCCESS", "Found a user! It's "+s+" c(**c)");
+            //Create references to GeoFire and Locations table
+            DatabaseReference l = mDatabase.child("Locations");
+            GeoFire person = new GeoFire(l);
 
+            //Username re-initialized, can't use 's' in onLocationResult unless it's final
+            final String username = s;
+
+            //Get username's UID
+            String uid = users.get(s);
+
+            person.getLocation(uid, new LocationCallback() {
+                @Override
+                public void onLocationResult(String key, GeoLocation location) {
+                    if(location != null){
+                        LatLng lt = new LatLng(location.latitude, location.longitude);
+                        mMap.addMarker(new MarkerOptions().position(lt).title(username));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(lt));
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } //End if
+        else{ //User doesn't exist, or empty string
+            Log.d("SEARCH_FAIL", "Didn't find a user!");
+        }
+    }
+
+    public void updateHashMap(HashMap<String, String> hashMap){
+        if(users != hashMap || users.isEmpty()){
+            users = hashMap;
+        }
+    }
+
+    public void logHashMap(){
+        if(!users.isEmpty()) {
+            Log.d("LOG_MAP", "Showing users...");
+            for (Map.Entry<String, String> entry : users.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                Log.d("USER", "name: " + key + "\tuid: " + value);
+            }
+        }
+    }
 
 }
