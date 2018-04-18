@@ -47,15 +47,17 @@ public class UserProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mRef = mDatabase.getReference();
 
-
+        //HashMap stuff
         users = new HashMap<>();
-        getUsersHT();
+        getUsers();
+        //Just wanted to see if table was initialized or not
+        //it was, so this can be deleted************************************************************
         for (Map.Entry<String, String> entry : users.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
             Log.d("USER", "name: " + key + "\tuid: " + value);
         }
-
+        //End delete********************************************************************************
         findButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,7 +67,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
-    public void getUsersHT(){
+    public void getUsers(){
         Query q = mRef.child("Users");
         q.addChildEventListener(new ChildEventListener() {
             @Override
