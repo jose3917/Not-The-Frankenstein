@@ -40,7 +40,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -57,6 +60,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Boolean isLoggedOut = false;
     FirebaseAuth mAuth;
     DatabaseReference mDatabase;
+
+    //List of users and their uids
+    HashMap<String, String>  users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //Used to zoom into map on startup
         //Unsure if this'll work with newly created accounts
         retrieveLastKnownLocation();
+
+        //users = new HashMap<>();
 
         //SAVING PREFERENCES
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -217,14 +225,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.d("RESUME", "Hello!");
         Intent intent = getIntent();
         if(intent.getSerializableExtra("table")!=null){
+            //old updateHashMap((HashMap<String, String>) intent.getSerializableExtra("table"));
+            Serializable data = getIntent().getSerializableExtra("table");
             Log.d("RESUME", "Received hash table, boi");
+            updateHashMap(receiveTable());
             if(!intent.getStringExtra("string").isEmpty()){
                 Log.d("RESUME", "Got the string too, it's: "
                         +intent.getStringExtra("string"));
+                String s = intent.getStringExtra("string");
+                findPerson(s);
+                logHashMap();
             }
             else{
                 Log.d("RESUME", "Empty string, bitch");
+                logHashMap();
             }
+        }
+        else{
+            Log.d("MISSING", "Hashtable not found.");
         }
     }
 
@@ -234,19 +252,59 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return (HashMap<String, String>) receiveTable.getSerializableExtra("table");
     }
 
-    @Override //maybe not useful********************************************************************
-    public void onNewIntent(Intent intent){
-        super.onNewIntent(intent);
-        if(intent.getStringExtra("string").equals("string")){
-            //call on method to place marker
-            //Toast.makeText(MapsActivity.this,"Received hash table, boi", Toast.LENGTH_SHORT)
-            //        .show();
-            Log.d("onNewIntent(): ", "Received hash table, boi");
+    public void findPerson(String s){ //Places marker on map
+        if(users.containsKey(s)){ //Case sensitive, uses username(key) to get UID(value)
+            Log.d("SEARCH_SUCCESS", "Found a user! It's "+s+" c(**c)");
+            //Create references to GeoFire and Locations table
+            DatabaseReference l = mDatabase.child("Locations");
+            GeoFire person = new GeoFire(l);
+
+            //Username re-initialized, can't use 's' in onLocationResult unless it's final
+            final String username = s;
+
+            //Get username's UID
+            String uid = users.get(s);
+
+            person.getLocation(uid, new LocationCallback() {
+                @Override
+                public void onLocationResult(String key, GeoLocation location) {
+                    if(location != null){
+                        LatLng lt = new LatLng(location.latitude, location.longitude);
+                        mMap.addMarker(new MarkerOptions().position(lt).title(username));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(lt));
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+            //person.getLocation();
         }
-    }//Will Delete**********************************************************************************
+        else{ //User doesn't exist, or empty string
+            Log.d("SEARCH_FAIL", "Didn't find a user!");
+        }
+    }
 
-    public void findPerson(String s){
+    public void updateHashMap(HashMap<String, String> hashMap){
+        if(users != hashMap || users.isEmpty()){
+            users = hashMap;
+        }
+    }
 
+    public void logHashMap(){
+        if(!users.isEmpty()) {
+            Log.d("LOG_MAP", "Showing users...");
+            for (Map.Entry<String, String> entry : users.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                Log.d("USER", "name: " + key + "\tuid: " + value);
+            }
+        }
     }
 
 }

@@ -49,11 +49,16 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
         users = new HashMap<>();
+        getUsersHT();
+        for (Map.Entry<String, String> entry : users.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            Log.d("USER", "name: " + key + "\tuid: " + value);
+        }
 
         findButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getUsersHT();
                 sendTableToMaps();
             }
         });
@@ -95,9 +100,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
     public void sendTableToMaps(){
         Intent sendTable = new Intent(UserProfileActivity.this, MapsActivity.class);
-        sendTable.putExtra("table", users);
-        String field = txt.getText().toString();
-        sendTable.putExtra("string", field);
+        sendTable.putExtra("table", users); //HashMap
+        sendTable.putExtra("string", txt.getText().toString()); //Text from box, if any
         startActivity(sendTable);
     }
 
@@ -121,6 +125,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void refreshTable(){
+        //Called in onResume when this activity is started again
+        //
     }
 
 }
