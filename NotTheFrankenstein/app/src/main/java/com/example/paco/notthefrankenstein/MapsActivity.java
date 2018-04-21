@@ -35,6 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,6 +71,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mLastLocation = new Location("");
 
 
         //Zoom to last known location
@@ -84,6 +86,47 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+/*
+        DatabaseReference l = mDatabase.child("Locations");
+        GeoFire person = new GeoFire(l);
+
+
+        FirebaseAuth nAuth;
+        FirebaseDatabase nDatabase;
+        DatabaseReference nRef;
+
+        nDatabase = FirebaseDatabase.getInstance();
+        nAuth = FirebaseAuth.getInstance();
+        nRef = nDatabase.getReference();
+
+        String username = nRef.child("Users").child(nAuth.getUid()).child("user_name").;
+        Log.d("username:", username);
+
+        person.getLocation(username, new LocationCallback() {
+            @Override
+            public void onLocationResult(String key, GeoLocation location) {
+
+                if(location != null){
+
+                    mLastLocation.setLongitude(location.longitude);
+                    mLastLocation.setLatitude(location.latitude);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        */
+
     }
 
     @Override
@@ -134,6 +177,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location) {
 
+        /*
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         //incognito = sharedPref.getBoolean("example_switch",);
@@ -143,6 +187,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             GeoFire geoFire = new GeoFire(ref);
             geoFire.setLocation("Location", new GeoLocation(location.getLatitude(), location.getLongitude()));
         }
+
+        */
 
         //Update Location
         mLastLocation = location;
@@ -162,6 +208,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     LatLng lt = new LatLng(location.latitude, location.longitude);
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(lt));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+                    mLastLocation.setLatitude(location.latitude);
+                    mLastLocation.setLongitude(location.longitude);
                 }
             }
 
@@ -261,8 +309,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 @Override
                 public void onLocationResult(String key, GeoLocation location) {
                     if(location != null){
+
+                        String s = username;
+                        s += " is ";
+
+                        Location temp = new Location("");
+                        temp.setLatitude(location.latitude);
+                        temp.setLongitude(location.longitude);
+
+                        String ss = getDistance(temp);
+
+                        s += ss;
+
+
+                        s += " away.";
+
                         LatLng lt = new LatLng(location.latitude, location.longitude);
-                        mMap.addMarker(new MarkerOptions().position(lt).title(username));
+                        mMap.addMarker(new MarkerOptions().position(lt).title(s));
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(lt));
                         mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
                     }
@@ -294,6 +357,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Log.d("USER", "name: " + key + "\tuid: " + value);
             }
         }
+    }
+
+    public String getDistance(Location friend){
+
+        String s = "who knows ";
+        float distance = 0;
+
+        distance  = friend.distanceTo(mLastLocation);
+
+        double temp = (double)distance;
+        temp = (temp)/0.3048;
+
+        if(temp )
+
+        DecimalFormat df = new DecimalFormat("##.##");
+        s = df.format(temp);
+
+        return s;
+
     }
 
 }
