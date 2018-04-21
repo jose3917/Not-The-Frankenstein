@@ -139,16 +139,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //incognito = sharedPref.getBoolean("example_switch",);
 
         if(!incognito) {
-            DatabaseReference ref = mDatabase.child("users").child(mAuth.getUid());
+            DatabaseReference ref = mDatabase.child("Locations");
             GeoFire geoFire = new GeoFire(ref);
-            geoFire.setLocation("Location", new GeoLocation(location.getLatitude(), location.getLongitude()));
+            geoFire.setLocation(mAuth.getUid(), new GeoLocation(location.getLatitude(), location.getLongitude()));
         }
 
-        //Update Location
+        /*Update Location
         mLastLocation = location;
         DatabaseReference ref = mDatabase.child("Locations");
         GeoFire geoFire = new GeoFire(ref);
         geoFire.setLocation(mAuth.getUid(), new GeoLocation(location.getLatitude(), location.getLongitude()));
+        */
 
     }
 
@@ -246,7 +247,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void findPerson(String s){ //Places marker on map
         if(users.containsKey(s)){ //Case sensitive, uses username(key) to get UID(value)
-            Log.d("SEARCH_SUCCESS", "Found a user! It's "+s+" c(**c)");
+            Log.d("SEARCH_SUCCESS", "༼ つ ◕_◕ ༽つ "+s);
             //Create references to GeoFire and Locations table
             DatabaseReference l = mDatabase.child("Locations");
             GeoFire person = new GeoFire(l);
