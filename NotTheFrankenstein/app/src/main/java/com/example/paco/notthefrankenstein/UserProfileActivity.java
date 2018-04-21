@@ -58,6 +58,17 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
+    private boolean checkFormField() {
+        String s = txt.getText().toString();;
+
+        if(s.isEmpty()){
+            txt.setError("Search key required");
+            return false;
+        }
+
+        return true;
+    }
+
     public static void setUserName(String s){
 
         FirebaseAuth nAuth;
@@ -128,10 +139,18 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     public void sendTableToMaps(){
+        if(!checkFormField()) return;
         Intent sendTable = new Intent(UserProfileActivity.this, MapsActivity.class);
         sendTable.putExtra("table", users);
         String field = txt.getText().toString();
         sendTable.putExtra("string", field);
         startActivity(sendTable);
+        finish();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        Log.d("DESTROY", "done");
     }
 }

@@ -16,6 +16,8 @@ import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.LocationCallback;
@@ -78,6 +80,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
+    public void onDestroy(){
+        super.onDestroy();
+        Log.d("DESTROY", "MapsActivity done");
+    }
+
+    @Override
     public void onStop(){
         super.onStop();
         if (mGoogleApiClient.isConnected()) {
@@ -93,7 +101,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent intent = getIntent();
         if(intent.getSerializableExtra("table")!=null){
             //old updateHashMap((HashMap<String, String>) intent.getSerializableExtra("table"));
-            Serializable data = getIntent().getSerializableExtra("table");
+            //Serializable data = getIntent().getSerializableExtra("table");
             Log.d("RESUME", "Received hash table, boi");
             updateHashMap(receiveTable());
             if(!intent.getStringExtra("string").isEmpty()){
@@ -105,7 +113,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             else{
                 Log.d("RESUME", "Empty string, bitch");
+                Log.d("TOAST", "Make the damn toast");
                 logHashMap();
+                Toast.makeText(getApplicationContext(), "Nothing to search", Toast.LENGTH_SHORT).show();
             }
         }
         else{
@@ -123,7 +133,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
 
@@ -143,13 +154,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             GeoFire geoFire = new GeoFire(ref);
             geoFire.setLocation(mAuth.getUid(), new GeoLocation(location.getLatitude(), location.getLongitude()));
         }
-
-        /*Update Location
-        mLastLocation = location;
-        DatabaseReference ref = mDatabase.child("Locations");
-        GeoFire geoFire = new GeoFire(ref);
-        geoFire.setLocation(mAuth.getUid(), new GeoLocation(location.getLatitude(), location.getLongitude()));
-        */
 
     }
 
@@ -277,6 +281,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } //End if
         else{ //User doesn't exist, or empty string
             Log.d("SEARCH_FAIL", "Didn't find a user!");
+            if(s.isEmpty()){
+                Toast.makeText(getApplicationContext(), "Nothing to search", Toast.LENGTH_SHORT).show();
+                Log.d("EMPTY", "no string");
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "No account with name: "+s+".", Toast.LENGTH_SHORT).show();
+                Log.d("DNE", "Didn't find a user!");
+            }
         }
     }
 
