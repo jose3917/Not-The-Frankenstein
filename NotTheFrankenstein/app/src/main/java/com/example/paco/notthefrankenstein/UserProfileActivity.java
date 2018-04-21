@@ -72,8 +72,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
-
-    public void getCurrentUsername(){
+    public void getCurrentUserData(){
         String current_uid = mAuth.getUid();
         Query q = mRef.child("Users").child(current_uid);
         q.addValueEventListener(new ValueEventListener() {
