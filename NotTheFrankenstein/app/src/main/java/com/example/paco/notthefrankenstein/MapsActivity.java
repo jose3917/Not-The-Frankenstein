@@ -360,10 +360,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         double temp = (double)distance;
         temp = (temp)/0.3048;
 
-        if(temp )
+        if(temp >= 5280){
 
-        DecimalFormat df = new DecimalFormat("##.##");
-        s = df.format(temp);
+            temp = temp * 0.00018939;
+
+
+        }else{
+
+            DecimalFormat df = new DecimalFormat("##.##");
+            s = df.format(temp);
+            s +="f";
+
+        }
+
+
 
         return s;
 
