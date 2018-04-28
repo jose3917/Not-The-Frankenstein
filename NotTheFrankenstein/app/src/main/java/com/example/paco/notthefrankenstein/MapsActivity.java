@@ -188,9 +188,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location) {
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        //incognito = sharedPref.getBoolean("example_switch",);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        incognito = sharedPreferences.getBoolean("example_switch", false);
 
         if(!incognito) {
             DatabaseReference ref = mDatabase.child("Locations");
