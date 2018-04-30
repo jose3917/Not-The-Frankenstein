@@ -9,6 +9,9 @@
         android:id="@+id/menu_user_profile"
         android:title="User Profile" />
     <item
+        android:id="@+id/menu_add_friend"
+        android:title="Add Friend" />
+    <item
         android:id="@+id/log_out_menu_item"
         android:title="Log Out" />
 </menu>

@@ -41,6 +41,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.paco.notthefrankenstein.MapsActivity" />
         </activity>
+        <activity android:name=".AddFriendActivity"></activity>
     </application>
 
 </manifest>

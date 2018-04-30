@@ -288,6 +288,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Intent intent = new Intent(MapsActivity.this, UserProfileActivity.class);
             startActivity(intent);
 
+        }else if(item.getItemId() == R.id.menu_add_friend){
+
+            Intent intent = new Intent(MapsActivity.this, AddFriendActivity.class);
+            startActivity(intent);
         }
 
         return true;
