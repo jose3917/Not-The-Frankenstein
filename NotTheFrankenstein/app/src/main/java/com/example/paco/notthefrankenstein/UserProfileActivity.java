@@ -5,8 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -17,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -24,8 +28,11 @@ public class UserProfileActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseDatabase mDatabase;
     DatabaseReference mRef;
+
+    //XML things
     Button findButton;
     EditText txt;
+    ListView friendsList;
 
     final static String DATA = "DATASNAPSHOT";
     final static String USERNAME = "USERNAME";
@@ -34,6 +41,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     //List of users and their uids
     HashMap<String, String> users;
+    ArrayList<String> friends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +50,29 @@ public class UserProfileActivity extends AppCompatActivity {
 
         findButton = (Button) findViewById(R.id.find_button);
         txt = (EditText) findViewById(R.id.editText);
+        friendsList = (ListView) findViewById(R.id.friendListView);
 
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
 
         users = new HashMap<>();
         getUsersHT();
+        ArrayList<String> arr = new ArrayList<String>(users.keySet());
+
+        String[] test = {"Uno", "Dos", "Tres"};
+        ArrayAdapter friendsListAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                test
+        );
+
+        friendsList.setAdapter(friendsListAdapter);
+        friendsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        });
 
         findButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,13 +130,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
     public void getUsersHT(){
         Query q = mRef.child("Users");
+
         q.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                User user = dataSnapshot.getValue(User.class);
-                //Log.d(TAG, "onChildAdded(): "+user.getUid());
                 for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                    //Log.d(DATA, "onChildAdded(): "+dataSnapshot.getValue());
                     User u = dataSnapshot.getValue(User.class);
                     users.put(u.getUser_name(), u.getUid());
                 }
@@ -136,6 +159,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
     public void sendTableToMaps(){
@@ -153,4 +177,5 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onDestroy();
         Log.d("DESTROY", "done");
     }
+
 }

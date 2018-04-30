@@ -30,7 +30,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-        this.uid = uid;
     }
 
     public void setUid(String uid) {
