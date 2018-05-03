@@ -9,7 +9,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="KGBl"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -32,7 +32,8 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".UserProfileActivity" />
+        <activity android:name=".UserProfileActivity"
+            android:label="Friend's List"/>
         <activity
             android:name=".SettingsActivity2"
             android:label="@string/title_activity_settings2"
@@ -41,7 +42,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.paco.notthefrankenstein.MapsActivity" />
         </activity>
-        <activity android:name=".AddFriendActivity"></activity>
+        <activity
+            android:name=".AddFriendActivity"
+            android:label="Add A Friend"
+            ></activity>
     </application>
 
 </manifest>
