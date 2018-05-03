@@ -6,8 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -20,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -31,6 +35,7 @@ public class UserProfileActivity extends AppCompatActivity {
     DatabaseReference mRef;
     Button findButton;
     EditText txt;
+    ListView friendsList;
 
     final static String DATA = "DATASNAPSHOT";
     final static String USERNAME = "USERNAME";
@@ -47,12 +52,30 @@ public class UserProfileActivity extends AppCompatActivity {
 
         findButton = (Button) findViewById(R.id.find_button);
         txt = (EditText) findViewById(R.id.editText);
+        friendsList = (ListView) findViewById(R.id.friendListView);
 
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
 
         users = new HashMap<>();
         getUsersHT();
+
+        ArrayList<String> arr = new ArrayList<String>(users.keySet());
+
+        String[] test = {"Jose", "Kevin", "Martin"};
+        ArrayAdapter friendsListAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                test
+        );
+
+        friendsList.setAdapter(friendsListAdapter);
+        friendsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        });
 
         findButton.setOnClickListener(new View.OnClickListener() {
             @Override

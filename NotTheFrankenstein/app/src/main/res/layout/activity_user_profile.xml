@@ -29,4 +29,11 @@
         android:text="Find"
         tools:layout_editor_absoluteX="265dp"
         tools:layout_editor_absoluteY="446dp" />
+
+    <ListView
+        android:id="@+id/friendListView"
+        android:layout_width="wrap_content"
+        android:layout_height="444dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginBottom="0dp" />
 </RelativeLayout>
