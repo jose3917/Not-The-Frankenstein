@@ -62,7 +62,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         ArrayList<String> arr = new ArrayList<String>(users.keySet());
 
-        String[] test = {"Jose", "Kevin", "Martin"};
+        final String[] test = {"John", "kevo", "Martin", "paco"};
         ArrayAdapter friendsListAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
@@ -73,7 +73,7 @@ public class UserProfileActivity extends AppCompatActivity {
         friendsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                listClick(test[i]);
             }
         });
 
@@ -173,6 +173,14 @@ public class UserProfileActivity extends AppCompatActivity {
         String field = txt.getText().toString();
         sendTable.putExtra("string", field);
         startActivity(sendTable);
+        finish();
+    }
+
+    public void listClick(String s){
+        Intent list = new Intent(UserProfileActivity.this, MapsActivity.class);
+        list.putExtra("table", users);
+        list.putExtra("string", s);
+        startActivity(list);
         finish();
     }
 
