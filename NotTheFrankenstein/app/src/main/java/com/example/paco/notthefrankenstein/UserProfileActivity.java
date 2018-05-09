@@ -62,7 +62,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         ArrayList<String> arr = new ArrayList<String>(users.keySet());
 
-        final String[] test = {"John", "kevo", "Martin", "paco"};
+        final String[] test = {"John", "kevo", "Martin", "paco", "Pickle Rick"};
         ArrayAdapter friendsListAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
@@ -73,7 +73,12 @@ public class UserProfileActivity extends AppCompatActivity {
         friendsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                listClick(test[i]);
+                if(i == 4){
+                    Toast.makeText(getApplicationContext(), "Dimension C-137", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    listClick(test[i]);
+                }
             }
         });
 

@@ -33,7 +33,8 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".UserProfileActivity"
-            android:label="Friend's List"/>
+            android:label="Friend's List"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".SettingsActivity2"
             android:label="@string/title_activity_settings2"
