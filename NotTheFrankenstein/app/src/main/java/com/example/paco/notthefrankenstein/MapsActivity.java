@@ -374,7 +374,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public String getDistance(Location friend){
 
-        String s = "who knows ";
+        String s = "who knows";
         float distance = 0;
 
         distance  = friend.distanceTo(mLastLocation);
@@ -386,6 +386,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             temp = temp * 0.00018939;
 
+            DecimalFormat df = new DecimalFormat("##.##");
+            s = df.format(temp);
+            s +="m";
 
         }else{
 
